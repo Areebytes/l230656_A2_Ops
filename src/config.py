@@ -23,3 +23,15 @@ DATA_DIR    = _path_from_env("DATA_DIR",    PROJECT_ROOT / "data" / "raw")
 REPORTS_DIR = _path_from_env("REPORTS_DIR", PROJECT_ROOT / "reports")
 SPLITS_DIR  = _path_from_env("SPLITS_DIR",  PROJECT_ROOT / "splits")
 FIGURES_DIR = _path_from_env("FIGURES_DIR", REPORTS_DIR / "figures")
+
+# ---------------- Training settings (overridable per experiment) ----------------
+SEED        = int(os.getenv("SEED", 42))
+IMG_SIZE    = int(os.getenv("IMG_SIZE", 160))     # square input, pixels
+BATCH_SIZE  = int(os.getenv("BATCH_SIZE", 32))
+RESIZE_MODE = os.getenv("RESIZE_MODE", "crop")    # "crop" | "pad" | "stretch"
+
+# Positive class = AI. The model's sigmoid output is P(image is AI-generated).
+CLASS_TO_LABEL = {"RealArt": 0, "AiArtData": 1}
+LABEL_TO_CLASS = {v: k for k, v in CLASS_TO_LABEL.items()}
+
+MODELS_DIR = _path_from_env("MODELS_DIR", PROJECT_ROOT / "models")
