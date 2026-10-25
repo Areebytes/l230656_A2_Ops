@@ -1,0 +1,8 @@
+{
+  "strategy": "max_fpr",
+  "max_fpr": 0.1,
+  "thresholds": {
+    "cnn_baseline": 0.680793821811676,
+    "transfer_mobilenetv2": 0.7867954969406128
+  }
+}

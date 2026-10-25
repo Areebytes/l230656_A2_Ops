@@ -105,6 +105,11 @@ def layer_table(model):
              "params": l.count_params()} for l in model.layers]
     return pd.DataFrame(rows)
 
+def layers_from(base, start_layer_name):
+    """Number of backbone layers from `start_layer_name` to the end."""
+    names = [l.name for l in base.layers]
+    return len(names) - names.index(start_layer_name)
+
 
 if __name__ == "__main__":
     from config import REPORTS_DIR
@@ -116,3 +121,4 @@ if __name__ == "__main__":
     out = REPORTS_DIR / "baseline_cnn_layers.csv"
     table.to_csv(out, index=False)
     print(f"\nSaved {out}")
+

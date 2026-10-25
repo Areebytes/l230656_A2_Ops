@@ -1,0 +1,7 @@
+=== Stage 1 (backbone frozen) ===
+Trainable params:     1,281
+Non-trainable params: 2,257,984
+Trainable backbone layers (0 of 154):
+  (none - backbone frozen)
+Trainable head layers:
+  p_ai

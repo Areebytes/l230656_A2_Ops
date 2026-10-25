@@ -1,0 +1,22 @@
+layer,type,output_shape,params
+image,InputLayer,"(None, 160, 160, 3)",0
+rescale_0_1,Rescaling,"(None, 160, 160, 3)",0
+block1_conv,Conv2D,"(None, 160, 160, 32)",864
+block1_bn,BatchNormalization,"(None, 160, 160, 32)",128
+block1_relu,Activation,"(None, 160, 160, 32)",0
+block1_pool,MaxPooling2D,"(None, 80, 80, 32)",0
+block2_conv,Conv2D,"(None, 80, 80, 64)",18432
+block2_bn,BatchNormalization,"(None, 80, 80, 64)",256
+block2_relu,Activation,"(None, 80, 80, 64)",0
+block2_pool,MaxPooling2D,"(None, 40, 40, 64)",0
+block3_conv,Conv2D,"(None, 40, 40, 128)",73728
+block3_bn,BatchNormalization,"(None, 40, 40, 128)",512
+block3_relu,Activation,"(None, 40, 40, 128)",0
+block3_pool,MaxPooling2D,"(None, 20, 20, 128)",0
+block4_conv,Conv2D,"(None, 20, 20, 256)",294912
+block4_bn,BatchNormalization,"(None, 20, 20, 256)",1024
+block4_relu,Activation,"(None, 20, 20, 256)",0
+block4_pool,MaxPooling2D,"(None, 10, 10, 256)",0
+gap,GlobalAveragePooling2D,"(None, 256)",0
+dropout,Dropout,"(None, 256)",0
+p_ai,Dense,"(None, 1)",257

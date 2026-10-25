@@ -1,0 +1,11 @@
+id,path,error_type,prob_ai,wrong_confidence,width,height,format,mode,file_size,hypothesis
+1,RealArt/famous-portrait-paintings_wide-3-2-636b81a7177ce.png,FP: real called AI,0.98562753,0.98562753,1200,800,PNG,RGB,1750322,
+2,AiArtData/can-artificial-intelligence-systems-like-dall-e-or-midjourney-perform-creative-tasks_8.jpg,FN: AI called real,0.029912276,0.970087724,2000,1143,JPEG,RGB,721442,
+3,AiArtData/Nov20_17_498430921.jpg,FN: AI called real,0.0321908,0.9678092,1200,675,JPEG,RGB,1214790,
+4,RealArt/hqdefault3.jpg,FP: real called AI,0.948592,0.948592,480,360,JPEG,RGB,29227,
+5,RealArt/hqdefault.jpg,FP: real called AI,0.93522716,0.93522716,480,360,JPEG,RGB,24356,
+6,RealArt/famous-paintings-fb.png,FP: real called AI,0.91387725,0.91387725,1200,630,PNG,RGB,1175469,
+7,AiArtData/robot-monitoring-dairy-farm-1200x800-1.jpg,FN: AI called real,0.13924289,0.86075711,1200,800,JPEG,RGB,234889,
+8,AiArtData/ai-generated-8067660_1280.jpg,FN: AI called real,0.1436338,0.8563662,1280,905,JPEG,RGB,424369,
+9,RealArt/3-x-3-template-newi.jpg,FP: real called AI,0.8504329,0.8504329,880,550,JPEG,RGB,126299,
+10,AiArtData/Boris-Eldagsen-AI-art.jpg,FN: AI called real,0.16249773,0.83750227,1068,601,JPEG,RGB,83102,

@@ -1,0 +1,10 @@
+=== Stage 2 (top 11 backbone layers unfrozen) ===
+Trainable params:     880,321
+Non-trainable params: 1,378,944
+Trainable backbone layers (4 of 154):
+  block_16_expand
+  block_16_depthwise
+  block_16_project
+  Conv_1
+Trainable head layers:
+  p_ai
