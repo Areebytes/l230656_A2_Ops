@@ -132,7 +132,7 @@ def main():
         if args.tracking == "autolog":
             # Autolog patches fit(): logs fit/optimizer params, per-epoch metrics,
             # early-stopping info, model summary and the model. We log NO params ourselves.
-            mlflow.tensorflow.autolog(log_models=True)
+            mlflow.keras.autolog(log_models=True)
             extra = []
         else:
             mlflow.log_params(params)
