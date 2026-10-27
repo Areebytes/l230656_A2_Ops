@@ -6,6 +6,7 @@ Stages:  read split CSV -> (path, label) -> decode -> resize -> cache
 
 Images leave the pipeline as float32 in [0, 255]. Each MODEL normalizes
 them itself (first layer), so serving only has to decode + resize.
+Decode/resize come from inference.py: ONE implementation for training and serving.
 """
 import os
 
@@ -15,41 +16,15 @@ import tensorflow as tf  # noqa: E402
 
 from config import (BATCH_SIZE, DATA_DIR, IMG_SIZE, LABEL_TO_CLASS,  # noqa: E402
                     RESIZE_MODE, SEED, SPLITS_DIR)
+from inference import decode_image  # noqa: E402,F401  (re-exported for other scripts)
+from inference import resize_image as _resize_image  # noqa: E402
 
 AUTOTUNE = tf.data.AUTOTUNE
 
 
-# ---------------------------------------------------------------------------
-# Shared preprocessing: Flask/API inference will import THESE functions,
-# so training and serving can never drift apart.
-# ---------------------------------------------------------------------------
-def decode_image(raw_bytes):
-    """Bytes -> uint8 tensor (H, W, 3). channels=3 converts L / P / RGBA to RGB."""
-    image = tf.io.decode_image(raw_bytes, channels=3, expand_animations=False)
-    image.set_shape([None, None, 3])
-    return image
-
-
 def resize_image(image, size=IMG_SIZE, mode=RESIZE_MODE):
-    """uint8 (H, W, 3) -> uint8 (size, size, 3).
-
-    crop    : centre square crop, then resize. Keeps proportions, loses edges.
-    pad     : resize to fit, fill the rest with black bars. Keeps everything.
-    stretch : squash to a square. Keeps everything, distorts shapes.
-    """
-    if mode == "crop":
-        h, w = tf.shape(image)[0], tf.shape(image)[1]
-        side = tf.minimum(h, w)
-        image = tf.image.crop_to_bounding_box(image, (h - side) // 2, (w - side) // 2, side, side)
-        image = tf.image.resize(image, [size, size], antialias=True)
-    elif mode == "pad":
-        image = tf.image.resize_with_pad(image, size, size, antialias=True)
-    elif mode == "stretch":
-        image = tf.image.resize(image, [size, size], antialias=True)
-    else:
-        raise ValueError(f"Unknown RESIZE_MODE: {mode}")
-    # back to uint8: 4x less memory in the cache than float32
-    return tf.cast(tf.clip_by_value(tf.round(image), 0, 255), tf.uint8)
+    """Training default: size and mode from config / env vars."""
+    return _resize_image(image, size, mode)
 
 
 # ---------------------------------------------------------------------------

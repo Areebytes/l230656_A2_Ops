@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ error_title or "Upload" }}{% endblock %}
+{% block content %}
+{% if error %}
+<div class="alert"><strong>{{ error_title }}</strong><br>{{ error }}</div>
+{% endif %}
+<section class="card">
+  <h1>Is this image AI-generated?</h1>
+  <p class="muted">Upload a JPG or PNG (max {{ max_mb|int }} MB). The image is analysed in memory and never stored.</p>
+  <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+    <label class="drop">
+      <input type="file" name="image" accept=".jpg,.jpeg,.png" required id="file">
+      <span id="file-label">Choose an image…</span>
+    </label>
+    <img id="preview" alt="" hidden>
+    <button type="submit">Analyse image</button>
+  </form>
+</section>
+<script>
+  // client-side preview only; nothing is uploaded until "Analyse" is pressed
+  const input = document.getElementById("file"), preview = document.getElementById("preview");
+  input.addEventListener("change", () => {
+    const f = input.files[0];
+    document.getElementById("file-label").textContent = f ? f.name : "Choose an image…";
+    if (f && f.type.startsWith("image/")) { preview.src = URL.createObjectURL(f); preview.hidden = false; }
+  });
+</script>
+{% endblock %}

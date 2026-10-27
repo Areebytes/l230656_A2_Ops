@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+<section class="card">
+  <p class="muted">Result #{{ r.id }} · {{ r.filename }}</p>
+  <div class="verdict {{ 'ai' if r.label == 'AI-generated' else 'real' }}">{{ r.label }}</div>
+  <p>Confidence: <strong>{{ '%.1f' % (r.confidence * 100) }}%</strong></p>
+  <div class="meter"><div style="width: {{ '%.1f' % (r.confidence * 100) }}%"></div></div>
+  <table class="details">
+    <tr><th>Probability of AI</th><td>{{ '%.4f' % r.prob_ai }}</td></tr>
+    <tr><th>Decision threshold</th><td>{{ '%.4f' % r.threshold }} (AI if probability ≥ threshold)</td></tr>
+    <tr><th>Model</th><td>{{ r.model_name }} v{{ r.model_version }}</td></tr>
+    <tr><th>Image</th><td>{{ r.width }}×{{ r.height }} px, {{ '%.0f' % (r.file_size / 1024) }} KB</td></tr>
+    <tr><th>Analysed at</th><td>{{ r.created_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC ({{ '%.0f' % r.inference_ms }} ms)</td></tr>
+  </table>
+
+  <div class="caveat">
+    <strong>Please read:</strong> this is an automated estimate from a model trained on about 1,000 images.
+    It is wrong in roughly 1 out of 5 cases, more often for edited photos, artworks,
+    small or heavily compressed images. Do not use it as the sole evidence that an image is real or fake.
+  </div>
+  <p class="actions"><a class="button" href="{{ url_for('index') }}">Check another image</a>
+     <a href="{{ url_for('history') }}">View history</a></p>
+</section>
+{% endblock %}

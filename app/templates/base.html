@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}VisionGuard{% endblock %} · VisionGuard</title>
+  <style>
+    :root { --bg:#f5f6f8; --card:#fff; --text:#1d2330; --muted:#667085; --line:#e4e7ec;
+            --brand:#3b5bdb; --ai:#d9480f; --real:#2b8a3e; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+           background:var(--bg); color:var(--text); }
+    .topbar { display:flex; justify-content:space-between; align-items:center;
+              padding:14px 24px; background:var(--card); border-bottom:1px solid var(--line); }
+    .brand { font-weight:700; font-size:1.2rem; color:var(--brand); text-decoration:none; }
+    nav a { margin-left:18px; color:var(--muted); text-decoration:none; }
+    nav a.active, nav a:hover { color:var(--brand); }
+    .container { max-width:960px; margin:32px auto; padding:0 16px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+            padding:28px; max-width:620px; margin:0 auto; }
+    .card.wide { max-width:none; }
+    h1 { margin-top:0; font-size:1.5rem; }
+    .muted { color:var(--muted); }
+    .alert { max-width:620px; margin:0 auto 16px; background:#fff1f0; border:1px solid #ffa39e;
+             color:#a8071a; border-radius:8px; padding:12px 14px; }
+    .drop { display:block; border:2px dashed var(--line); border-radius:10px; padding:28px;
+            text-align:center; cursor:pointer; margin:16px 0; }
+    .drop:hover { border-color:var(--brand); }
+    .drop input { display:none; }
+    #preview { max-width:100%; max-height:260px; display:block; margin:0 auto 16px; border-radius:8px; }
+    button, .button { background:var(--brand); color:#fff; border:0; border-radius:8px;
+                      padding:10px 18px; font-size:1rem; cursor:pointer; text-decoration:none; }
+    .verdict { font-size:2rem; font-weight:700; margin:8px 0; }
+    .verdict.ai, .tag.ai { color:var(--ai); }
+    .verdict.real, .tag.real { color:var(--real); }
+    .meter { height:10px; background:var(--line); border-radius:5px; overflow:hidden; margin-bottom:20px; }
+    .meter div { height:100%; background:var(--brand); }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); font-size:.95rem; }
+    .details th { color:var(--muted); font-weight:500; width:40%; }
+    .history th { color:var(--muted); font-weight:600; }
+    .history td.file { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .tag { font-weight:600; }
+    .caveat { background:#fff8e6; border:1px solid #ffe08a; border-radius:8px; padding:12px 14px; margin:20px 0; }
+    .actions { display:flex; gap:16px; align-items:center; margin-top:20px; }
+    footer { text-align:center; color:var(--muted); font-size:.85rem; padding:24px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">VisionGuard</a>
+    <nav>
+      <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">Upload</a>
+      <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">History</a>
+      <a href="{{ url_for('health') }}">Health</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer>Model: {{ model_label }} · AI-generated vs real image classifier</footer>
+</body>
+</html>

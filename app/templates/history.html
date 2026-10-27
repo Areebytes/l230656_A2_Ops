@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+{% block content %}
+<section class="card wide">
+  <h1>Prediction history</h1>
+  <p class="muted">Every analysis is recorded: what was decided, when, by which model, and how confidently.</p>
+  {% if rows %}
+  <table class="history">
+    <thead><tr><th>#</th><th>Time (UTC)</th><th>File</th><th>Verdict</th>
+      <th>Confidence</th><th>P(AI)</th><th>Model</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td><a href="{{ url_for('result', prediction_id=r.id) }}">{{ r.id }}</a></td>
+        <td>{{ r.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td class="file">{{ r.filename }}</td>
+        <td><span class="tag {{ 'ai' if r.label == 'AI-generated' else 'real' }}">{{ r.label }}</span></td>
+        <td>{{ '%.1f' % (r.confidence * 100) }}%</td>
+        <td>{{ '%.3f' % r.prob_ai }}</td>
+        <td>{{ r.model_name }} v{{ r.model_version }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No predictions yet. <a href="{{ url_for('index') }}">Upload an image</a> to get started.</p>
+  {% endif %}
+</section>
+{% endblock %}

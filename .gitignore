@@ -6,3 +6,5 @@ mlflow.db
 mlruns/
 mlartifacts/
 .vscode/
+/serving_model/
+/instance/
