@@ -7,10 +7,24 @@ folder you run them from) and can be overridden with an environment variable
 code changes).
 """
 import os
+import sys
+
+# Windows consoles default to cp1252, which can't print emoji/Unicode
+# (MLflow prints "🏃 View run ..." when using a remote server).
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="replace")
 from pathlib import Path
 
 # src/config.py -> parent is src/, parent.parent is the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+from dotenv import load_dotenv
+
+# Read secrets/settings from .env into environment variables (if the file exists).
+# Real environment variables win over .env values (override=False), so Docker/CI
+# can inject their own without editing files.
+load_dotenv(PROJECT_ROOT / ".env", override=False)
 
 
 def _path_from_env(var_name: str, default: Path) -> Path:
