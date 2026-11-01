@@ -1,6 +1,7 @@
 # VisionGuard web app - production image (Task 6.2)
-# Slim base: Debian + Python only, no compilers/docs. Same Python (3.12) as training.
-FROM python:3.12-slim
+# Base image is a build argument so before/after sizes can be compared (Task 6.4)
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 
 # No .pyc files, logs appear immediately, no pip cache kept in the image, quieter TensorFlow
 ENV PYTHONDONTWRITEBYTECODE=1 \
