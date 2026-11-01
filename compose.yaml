@@ -1,0 +1,40 @@
+# VisionGuard stack (Task 6.3): web app + PostgreSQL
+# All passwords come from the untracked .env file (see .env.example).
+name: l230656_a2_ops
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data      # named volume: data survives restarts
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    # no "ports:" -> the database is NOT reachable from outside Docker
+
+  web:
+    build: .
+    image: l230656_a2_ops-web
+    depends_on:
+      db:
+        condition: service_healthy           # wait until PostgreSQL is ready
+    environment:
+      # "db" is the service name = hostname on Compose's internal network
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      MAX_UPLOAD_MB: "10"
+    volumes:
+      - ./serving_model:/models:ro           # champion model, mounted read-only
+    ports:
+      - "8000:8000"                          # only the web app is published
+    restart: unless-stopped
+
+volumes:
+  pgdata:

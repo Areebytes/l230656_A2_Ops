@@ -1,0 +1,16 @@
+.git/
+.venv/
+.vscode/
+.dvc/
+data/
+models/
+mlruns/
+mlflow.db
+instance/
+reports/
+splits/
+serving_model/
+**/__pycache__/
+*.pyc
+.env
+.env.*
