@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"                       # same Python as training/serving
+          cache: pip                                   # reuse downloaded packages between runs
+          cache-dependency-path: requirements_serve.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements_serve.txt
+          pip install pytest ruff
+
+      - name: Lint
+        run: ruff check app src tests --select E9,F63,F7,F82
+
+      - name: Run tests
+        run: pytest -q
+
+  docker:
+    needs: test                                        # only build if tests passed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t l230656_a2_ops-web:ci .
